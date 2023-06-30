@@ -1,0 +1,10 @@
+.Size {
+  width: 50%;
+  margin: auto;
+}
+
+@media only screen and (max-width: 450px) {
+  .Size {
+    width: 90%;
+  }
+}
