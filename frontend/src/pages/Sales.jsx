@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config";
+import axios from "axios";
 
 const Sales = () => {
+  const [sales, setSales] = useState([]);
+
+  const getTopFive = () => {
+    axios
+      .get(`${API_BASE_URL}/sales/topsales`)
+      .then((response) => {
+        if (response.status !== 200) {
+          throw new Error("Error fetching sales");
+        }
+        return response.data;
+      })
+      .then((data) => setSales(data))
+      .catch((error) => console.error(error));
+  };
+
+  useEffect(() => {
+    getTopFive();
+  }, []);
+
   return (
     <div>
       <div className="mt-3">
@@ -18,20 +39,15 @@ const Sales = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>SI212</td>
-              <td>Laptop</td>
-              <td>2</td>
-              <td>90000</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>SI423</td>
-              <td>Mobile</td>
-              <td>5</td>
-              <td>85000</td>
-            </tr>
+            {sales.map((sale, index) => (
+              <tr key={sale._id}>
+                <th scope="row">{index + 1}</th>
+                <td>{sale._id}</td>
+                <td>{sale.productName}</td>
+                <td>{sale.quantity}</td>
+                <td>{sale.amount}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

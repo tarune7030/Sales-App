@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ user, handleUser }) => {
   const [activeNavItem, setActiveNavItem] = useState("addSales");
 
   const handleNavItemClick = (navItem) => {
     setActiveNavItem(navItem);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    handleUser(null);
+  };
+
   return (
     <div className="bg-primary">
-      <nav className="navbar navbar-expand-lg ">
-        <div className="container-fluid ">
-          <a className="navbar-brand text-white" href="/">
+      <nav className="navbar navbar-expand-lg">
+        <div className="container-fluid">
+          <NavLink className="navbar-brand text-white" to="/">
             SALES APP
-          </a>
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"
@@ -26,7 +31,7 @@ const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className=" collapse navbar-collapse" id="navbarNav">
+          <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li
                 className={`nav-item ${
@@ -34,7 +39,7 @@ const Navbar = () => {
                 }`}
               >
                 <NavLink
-                  className={`float-start nav-link ${
+                  className={`nav-link ${
                     activeNavItem === "addSales" ? "text-white" : ""
                   }`}
                   to="/"
@@ -49,7 +54,7 @@ const Navbar = () => {
                 }`}
               >
                 <NavLink
-                  className={`float-start nav-link ${
+                  className={`nav-link ${
                     activeNavItem === "topSales" ? "text-white" : ""
                   }`}
                   to="/sales"
@@ -64,7 +69,7 @@ const Navbar = () => {
                 }`}
               >
                 <NavLink
-                  className={`float-start nav-link ${
+                  className={`nav-link ${
                     activeNavItem === "totalRevenue" ? "text-white" : ""
                   }`}
                   to="/revenue"
@@ -73,41 +78,46 @@ const Navbar = () => {
                   TODAY'S TOTAL REVENUE
                 </NavLink>
               </li>
-              <li
-                className={`nav-item ${
-                  activeNavItem === "login" ? "active" : ""
-                }`}
-              >
-                <NavLink
-                  className={`float-start nav-link ${
-                    activeNavItem === "login" ? "text-white" : ""
-                  }`}
-                  to="/login"
-                  onClick={() => handleNavItemClick("login")}
-                >
-                  LOGIN
-                </NavLink>
-              </li>
-              <li
-                className={`nav-item ${
-                  activeNavItem === "register" ? "active" : ""
-                }`}
-              >
-                <NavLink
-                  className={`float-start nav-link ${
-                    activeNavItem === "register" ? "text-white" : ""
-                  }`}
-                  to="/register"
-                  onClick={() => handleNavItemClick("register")}
-                >
-                  REGISTER
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <a href="/" className="float-start nav-link disabled ">
-                  LOGOUT
-                </a>
-              </li>
+              {!user ? (
+                <>
+                  <li
+                    className={`nav-item ${
+                      activeNavItem === "login" ? "active" : ""
+                    }`}
+                  >
+                    <NavLink
+                      className={`nav-link ${
+                        activeNavItem === "login" ? "text-white" : ""
+                      }`}
+                      to="/login"
+                      onClick={() => handleNavItemClick("login")}
+                    >
+                      LOGIN
+                    </NavLink>
+                  </li>
+                  <li
+                    className={`nav-item ${
+                      activeNavItem === "register" ? "active" : ""
+                    }`}
+                  >
+                    <NavLink
+                      className={`nav-link ${
+                        activeNavItem === "register" ? "text-white" : ""
+                      }`}
+                      to="/register"
+                      onClick={() => handleNavItemClick("register")}
+                    >
+                      REGISTER
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <li className="nav-item">
+                  <a href="/login" className="nav-link" onClick={handleLogout}>
+                    LOGOUT
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
